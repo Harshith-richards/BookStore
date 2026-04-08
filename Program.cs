@@ -1,5 +1,7 @@
 
+using BookStore.Data;
 using BookStore.Repository;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStore
 {
@@ -10,6 +12,10 @@ namespace BookStore
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            builder.Services.AddDbContext<BookStoreContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             builder.Services.AddScoped<IBookRepository, BookRepository>();
 
             builder.Services.AddControllers();
