@@ -1,7 +1,10 @@
-﻿namespace BookStore.Repository
+﻿using BookStore.Models;
+
+namespace BookStore.Repository
 {
     public interface IBookRepository
     {
+        Task<List<BooksModel>> GetAllBooksAsync();
 
     }
 }
