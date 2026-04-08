@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BookStore.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.Controllers
@@ -7,5 +8,18 @@ namespace BookStore.Controllers
     [ApiController]
     public class BooksController : ControllerBase
     {
+        private readonly IBookRepository _bookRepository;
+
+        public BooksController(IBookRepository bookRepository)
+        {
+            _bookRepository = bookRepository;
+        }
+
+        [HttpGet("")]
+        public async Task<IActionResult> GetAllBooks()
+        {
+            var records = await _bookRepository.GetAllBooksAsync();
+            return Ok(records);
+        }
     }
 }
