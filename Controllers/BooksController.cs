@@ -41,5 +41,18 @@ namespace BookStore.Controllers
             var id = await _bookRepository.AddBookAsync(bookmodel);
             return CreatedAtAction(nameof(GetBookById), new { id = id, Controller = "books" }, id);
         }
+
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBook([FromBody] BooksModel bookmodel , [FromRoute] int id)
+        {
+
+            bool result = await _bookRepository.UpdateBookAsync(id, bookmodel);
+            if (result)
+            {
+                return CreatedAtAction(nameof(GetBookById), new { id = id, Controller = "books" }, id);
+            }
+            return NotFound(new { Message = $"No Book found in the id {id}"});
+        }
     }
 }
