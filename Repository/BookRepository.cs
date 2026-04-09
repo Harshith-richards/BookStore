@@ -1,4 +1,6 @@
 ﻿namespace BookStore.Repository;
+
+using Azure;
 using BookStore.Data;
 using BookStore.Models;
 
@@ -80,6 +82,25 @@ public class BookRepository : IBookRepository
         _context.Books.Add(book);
         await _context.SaveChangesAsync();
         return true;
+    }
+
+	//public async Task<bool> UpdateBookPatchAsync(int bookId, JsonPatchDocument bookModel)
+	//{
+	//	var book = await _context.Books.FindAsync(bookId);
+	//	if (book != null)
+	//	{
+	//		 bookModel.ApplyTo(book);
+	//		await _context.SaveChangesAsync();
+ //           return true;
+ //       }
+ //       return false;
+	//}
+
+	public async Task DeleteBookAsync(int bookId)
+	{
+		var book = new Books() { Id= bookId };
+		_context.Books.Remove(book);
+		await _context.SaveChangesAsync();
     }
 
 

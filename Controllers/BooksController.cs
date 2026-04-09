@@ -1,4 +1,5 @@
-﻿using BookStore.Models;
+﻿using Azure;
+using BookStore.Models;
 using BookStore.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -54,5 +55,26 @@ namespace BookStore.Controllers
             }
             return NotFound(new { Message = $"No Book found in the id {id}"});
         }
+
+        //[HttpPatch("{id}")]
+        //public async Task<IActionResult> UpdateBookPatch([FromBody] JsonPatchDocument bookModel, [FromRoute] int id)
+        //{
+
+        //    bool result = await _bookRepository.UpdateBookPatchAsync(id, bookModel);
+        //    if (result)
+        //    {
+        //        return CreatedAtAction(nameof(GetBookById), new { id = id, Controller = "books" }, id);
+        //    }
+        //    return NotFound(new { Message = $"No Book found in the id {id}" });
+        //}
+
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBook(int id)
+        {
+            await _bookRepository.DeleteBookAsync(id);
+            return Ok();
+        }
+
     }
 }

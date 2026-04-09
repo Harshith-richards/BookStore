@@ -1,4 +1,5 @@
-﻿using BookStore.Models;
+﻿using Azure;
+using BookStore.Models;
 
 namespace BookStore.Repository
 {
@@ -10,5 +11,8 @@ namespace BookStore.Repository
 
         Task<bool> UpdateBookAsync(int bookId, BooksModel bookmodel);
 
+        //Task<bool> UpdateBookPatchAsync(int bookId, JsonPatchDocument bookmodel);
+
+        Task DeleteBookAsync(int bookId);
     }
 }
