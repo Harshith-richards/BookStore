@@ -55,5 +55,22 @@ public class BookRepository : IBookRepository
     }
 
 
+    // Updateing a book record
+
+	public async Task<bool> UpdateBookAsync(int bookId, BooksModel bookmodel)
+	{
+		var book = await _context.Books.FindAsync(bookId);
+		if(book!=null)
+		{
+			book.Title = bookmodel.Title;
+			book.Description= bookmodel.Description;
+
+			await _context.SaveChangesAsync();
+			return true;
+        }
+		return false;
+    }
+
+
 }
 
