@@ -1,4 +1,5 @@
-﻿using BookStore.Repository;
+﻿using BookStore.Models;
+using BookStore.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,19 +10,20 @@ namespace BookStore.Controllers
     public class BooksController : ControllerBase
     {
         private readonly IBookRepository _bookRepository;
-
+        //Constructor injection
         public BooksController(IBookRepository bookRepository)
         {
             _bookRepository = bookRepository;
         }
-
+        // GET: api/Books
         [HttpGet("")]
         public async Task<IActionResult> GetAllBooks()
         {
             var records = await _bookRepository.GetAllBooksAsync();
             return Ok(records);
         }
-
+        
+        // GET: api/Books/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBookById(int id)
         {
@@ -31,6 +33,13 @@ namespace BookStore.Controllers
                 return NotFound();
             }
             return Ok(record);
+        }
+
+        [HttpPost("")]
+        public async Task<IActionResult> AddBook(BooksModel bookmodel)
+        {
+            var id = await _bookRepository.AddBookAsync(bookmodel);
+            return CreatedAtAction(nameof(GetBookById), new { id = id, Controller = "books" }, id);
         }
     }
 }
