@@ -7,10 +7,12 @@ using Microsoft.EntityFrameworkCore;
 public class BookRepository : IBookRepository
 {
 	private readonly BookStoreContext _context;
-	public BookRepository(BookStoreContext context)
+    //Constructor injection
+    public BookRepository(BookStoreContext context)
 	{
 		_context = context;
 	}
+
 	public async Task<List<BooksModel>> GetAllBooksAsync()
 	{
 		var records = await _context.Books.Select(x => new BooksModel()
@@ -36,6 +38,21 @@ public class BookRepository : IBookRepository
 
 		return record;
 	}
+
+
+	public async Task<int> AddBookAsync(BooksModel bookmodel)
+	{
+		var book = new Books()
+		{
+			Title = bookmodel.Title,
+			Description = bookmodel.Description
+		};
+
+		_context.Books.Add(book);
+		await _context.SaveChangesAsync();
+
+		return book.Id;
+    }
 
 
 }
