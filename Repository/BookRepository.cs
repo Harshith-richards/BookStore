@@ -1,5 +1,6 @@
 ﻿namespace BookStore.Repository;
 
+using AutoMapper;
 using Azure;
 using BookStore.Data;
 using BookStore.Models;
@@ -9,10 +10,12 @@ using Microsoft.EntityFrameworkCore;
 public class BookRepository : IBookRepository
 {
 	private readonly BookStoreContext _context;
+    private readonly IMapper _mapper;
     //Constructor injection
-    public BookRepository(BookStoreContext context)
+    public BookRepository(BookStoreContext context, IMapper mapper)
 	{
 		_context = context;
+        _mapper = mapper;
 	}
 
 	public async Task<List<BooksModel>> GetAllBooksAsync()
@@ -29,17 +32,22 @@ public class BookRepository : IBookRepository
 	
 	public async Task<BooksModel> GetBookByIdAsync(int bookId)
 	{
-		var record = await _context.Books
-			.Where(x => x.Id == bookId)
-			.Select(x => new BooksModel()
-			{
-				Id = x.Id,
-				Title = x.Title,
-				Description = x.Description,
-			}).FirstOrDefaultAsync();
+		//var record = await _context.Books
+		//	.Where(x => x.Id == bookId)
+		//	.Select(x => new BooksModel()
+		//	{
+		//		Id = x.Id,
+		//		Title = x.Title,
+		//		Description = x.Description,
+		//	}).FirstOrDefaultAsync();
 
-		return record;
-	}
+		//return record;
+
+		var book = await _context.Books.FindAsync(bookId);
+		return _mapper.Map<BooksModel>(book);
+
+
+    }
 
 
 	public async Task<int> AddBookAsync(BooksModel bookmodel)
