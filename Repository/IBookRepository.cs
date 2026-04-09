@@ -8,5 +8,7 @@ namespace BookStore.Repository
         Task<BooksModel> GetBookByIdAsync(int bookId);
         Task<int> AddBookAsync(BooksModel bookmodel);
 
+        Task<bool> UpdateBookAsync(int bookId, BooksModel bookmodel);
+
     }
 }
