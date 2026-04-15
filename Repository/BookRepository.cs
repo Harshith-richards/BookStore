@@ -20,14 +20,18 @@ public class BookRepository : IBookRepository
 
 	public async Task<List<BooksModel>> GetAllBooksAsync()
 	{
-		var records = await _context.Books.Select(x => new BooksModel()
-		{
-			Id = x.Id,
-			Title = x.Title,
-			Description = x.Description,
-		}).ToListAsync();
+		//var records = await _context.Books.Select(x => new BooksModel()
+		//{
+		//	Id = x.Id,
+		//	Title = x.Title,
+		//	Description = x.Description,
+		//}).ToListAsync();
 
-		return records;
+		//return records;
+
+
+		var records = await _context.Books.ToListAsync();
+		return _mapper.Map<List<BooksModel>>(records);
 	}
 	
 	public async Task<BooksModel> GetBookByIdAsync(int bookId)
@@ -52,15 +56,18 @@ public class BookRepository : IBookRepository
 
 	public async Task<int> AddBookAsync(BooksModel bookmodel)
 	{
-		var book = new Books()
-		{
-			Title = bookmodel.Title,
-			Description = bookmodel.Description
-		};
+		//var book = new Books()
+		//{
+		//	Title = bookmodel.Title,
+		//	Description = bookmodel.Description
+		//};
 
-		_context.Books.Add(book);
-		await _context.SaveChangesAsync();
+		//_context.Books.Add(book);
+		//await _context.SaveChangesAsync();
 
+		//return book.Id;
+
+		var book = _mapper.Map<Books>(bookmodel);
 		return book.Id;
     }
 
