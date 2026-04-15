@@ -2,6 +2,7 @@
 using BookStore.Data;
 using BookStore.Models;
 using BookStore.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,26 @@ namespace BookStore
             builder.Services.AddTransient<IAccountRepository, AccountRepository>();
 
             builder.Services.AddAutoMapper(typeof(Program));
+
+
+            // Configure JWT authentication
+            builder.Services.AddAuthentication(options => {
+                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                 options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+             })
+                .AddJwtBearer(options => {
+                    options.SaveToken = true;
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidAudience = builder.Configuration["Jwt:ValidAudience"],
+                        ValidIssuer = builder.Configuration["Jwt:ValidIssuer"],
+                        IssuerSigningKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Secret"]))
+                    };
+                });
 
             builder.Services.AddControllers().AddNewtonsoftJson();
 
