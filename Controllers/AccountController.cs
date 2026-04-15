@@ -29,5 +29,19 @@ namespace BookStore.Controllers
 
             return BadRequest(result.Errors); // 
         }
+
+        [AllowAnonymous]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] SignInModel signInModel)
+        {
+            var token = await _accountRepository.LoginAsync(signInModel);
+            if (string.IsNullOrEmpty(token))
+            {
+                return Unauthorized();
+            }
+            return Ok(token); // Return the token if login is successful, otherwise return an unauthorized response
+
+
+        }
     }
-}
+}   
