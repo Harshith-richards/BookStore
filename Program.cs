@@ -1,6 +1,8 @@
 
 using BookStore.Data;
+using BookStore.Models;
 using BookStore.Repository;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookStore
@@ -21,6 +23,22 @@ namespace BookStore
 
             builder.Services.AddControllers().AddNewtonsoftJson();
 
+            // Enable CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+
+            // Configure Identity
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<BookStoreContext>()
+                .AddDefaultTokenProviders();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -37,7 +55,9 @@ namespace BookStore
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-
+            
+            // Enable CORS
+            app.UseCors();
 
             app.MapControllers();
 
