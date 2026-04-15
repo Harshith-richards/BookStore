@@ -18,7 +18,9 @@ namespace BookStore
             builder.Services.AddDbContext<BookStoreContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-            builder.Services.AddScoped<IBookRepository, BookRepository>();
+            builder.Services.AddTransient<IBookRepository, BookRepository>();
+            builder.Services.AddTransient<IAccountRepository, AccountRepository>();
+
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddControllers().AddNewtonsoftJson();
@@ -53,7 +55,8 @@ namespace BookStore
             }
 
             app.UseHttpsRedirection();
-
+            // Enable authentication and authorization
+            app.UseAuthentication();  
             app.UseAuthorization();
             
             // Enable CORS
